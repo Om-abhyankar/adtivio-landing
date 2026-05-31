@@ -87,7 +87,7 @@ const ecosystemContent: Record<
   },
 };
 
-const formAction = "https://formspree.io/f/your-form-id";
+const formAction = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -101,6 +101,7 @@ export default function Home() {
     message: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormFields, string>>>({});
+  const [formEndpointError, setFormEndpointError] = useState("");
 
   const activePanel = useMemo(() => ecosystemContent[activeTab], [activeTab]);
 
@@ -110,7 +111,7 @@ export default function Home() {
     if (!form.name.trim()) nextErrors.name = "Name is required.";
     if (!form.email.trim()) {
       nextErrors.email = "Email is required.";
-    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) {
       nextErrors.email = "Enter a valid email address.";
     }
     if (!form.company.trim()) nextErrors.company = "Company is required.";
@@ -127,12 +128,12 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-slate-950 text-slate-100">
+    <div id="top" className="relative min-h-screen overflow-x-clip bg-slate-950 text-slate-100">
       <BackgroundParticles />
 
       <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/60 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <a href="#" className="group flex items-center gap-2 text-sm font-semibold tracking-[0.35em] text-cyan-100">
+          <a href="#top" className="group flex items-center gap-2 text-sm font-semibold tracking-[0.35em] text-cyan-100">
             <Cpu className="h-4 w-4 text-cyan-300 transition-transform duration-300 group-hover:rotate-12" />
             ADTIVIO
           </a>
@@ -339,13 +340,19 @@ export default function Home() {
             </div>
 
             <form
-              action={formAction}
+              action={formAction || undefined}
               method="POST"
               onSubmit={(event) => {
+                if (!formAction) {
+                  event.preventDefault();
+                  setFormEndpointError("Form submission is currently unavailable. Please contact us directly.");
+                  return;
+                }
                 if (!validate()) {
                   event.preventDefault();
                   return;
                 }
+                setFormEndpointError("");
                 setSubmitting(true);
               }}
               className="space-y-4"
@@ -406,11 +413,14 @@ export default function Home() {
               <button
                 type="submit"
                 className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-cyan-400 px-5 py-3 text-sm font-semibold tracking-[0.14em] text-slate-950 transition-transform duration-300 hover:scale-[1.01] disabled:opacity-70"
-                disabled={submitting}
+                disabled={submitting || !formAction}
               >
                 {submitting ? "Submitting..." : "Request Strategy Call"}
               </button>
-              <p className="text-xs text-slate-400">Form endpoint is Formspree-ready. Replace <code>/your-form-id</code> with your real Formspree form ID.</p>
+              {!formAction && (
+                <p className="text-xs text-slate-400">Set <code>NEXT_PUBLIC_FORM_ENDPOINT</code> to your Formspree or Google Form action URL.</p>
+              )}
+              {formEndpointError && <p className="text-xs text-rose-300">{formEndpointError}</p>}
             </form>
           </div>
         </section>
@@ -432,8 +442,16 @@ function BackgroundParticles() {
         <path d="M40 130 L270 240 L520 140 L760 260 L1090 120" stroke="url(#lineGradient)" strokeWidth="1" />
         <path d="M120 590 L330 460 L600 570 L900 420 L1110 540" stroke="url(#lineGradient)" strokeWidth="1" />
         <path d="M230 320 L430 430 L660 340 L860 470" stroke="url(#lineGradient)" strokeWidth="1" />
-        {["270 240", "520 140", "760 260", "600 570", "900 420", "430 430", "660 340"].map((point) => (
-          <circle key={point} cx={point.split(" ")[0]} cy={point.split(" ")[1]} r="4" fill="url(#dotGradient)" />
+        {[
+          { x: 270, y: 240 },
+          { x: 520, y: 140 },
+          { x: 760, y: 260 },
+          { x: 600, y: 570 },
+          { x: 900, y: 420 },
+          { x: 430, y: 430 },
+          { x: 660, y: 340 },
+        ].map((point) => (
+          <circle key={`${point.x}-${point.y}`} cx={point.x} cy={point.y} r="4" fill="url(#dotGradient)" />
         ))}
         <defs>
           <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="1">

@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   basePath: isGithubActions ? `/${repoName}` : "",
-  assetPrefix: isGithubActions ? `/${repoName}/` : undefined,
+  assetPrefix: isGithubActions ? `/${repoName}` : undefined,
 };
 
 export default nextConfig;

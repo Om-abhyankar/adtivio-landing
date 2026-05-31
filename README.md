@@ -27,18 +27,20 @@ This generates static assets in `out/` for GitHub Pages.
 
 ## Form integration
 
-The contact form posts to Formspree. Update this value in `/app/page.tsx`:
+The contact form submits to a static endpoint from an environment variable.
 
-```ts
-const formAction = "https://formspree.io/f/your-form-id";
+Create `.env.local`:
+
+```bash
+NEXT_PUBLIC_FORM_ENDPOINT="https://formspree.io/f/your-form-id"
 ```
 
-You can replace it with your own Formspree endpoint or a Google Form endpoint.
+You can set this to either your Formspree endpoint or a Google Form action URL.
 
 ## GitHub Pages auto-deploy
 
 - Workflow file: `/.github/workflows/deploy.yml`
-- Trigger: push to `main`
+- Trigger: push to `main` and manual `workflow_dispatch`
 - Output branch: `gh-pages`
 - `.nojekyll` is included via `public/.nojekyll`
 
