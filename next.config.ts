@@ -1,7 +1,12 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
-const repo = "adtivio-landing";
+const packageJson = JSON.parse(
+  readFileSync(join(process.cwd(), "package.json"), "utf8"),
+) as { name?: string };
+const repo = packageJson.name ?? "adtivio-landing";
 
 const nextConfig: NextConfig = {
   output: "export",

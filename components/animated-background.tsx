@@ -25,7 +25,7 @@ export function AnimatedBackground() {
         {dots.map((dot) => (
           <g key={dot.id}>
             <circle cx={dot.cx} cy={dot.cy} r="0.8" fill="#67e8f9" />
-            {dot.id % 3 !== 0 ? (
+            {dot.id > 0 && dot.id % 3 !== 0 ? (
               <line
                 x1={dot.cx}
                 y1={dot.cy}

@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 
 const initial = { name: "", email: "", company: "", message: "" };
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function ContactBlock() {
   const [form, setForm] = useState(initial);
@@ -10,7 +11,7 @@ export function ContactBlock() {
 
   const isValid =
     form.name.trim().length > 1 &&
-    form.email.includes("@") &&
+    emailRegex.test(form.email.trim()) &&
     form.company.trim().length > 1 &&
     form.message.trim().length > 10;
 
@@ -78,6 +79,10 @@ export function ContactBlock() {
         >
           Book Discovery Call
         </button>
+        <p className="text-xs text-slate-300/90">
+          Demo form for GitHub Pages static hosting. Connect this block to your CRM
+          or API endpoint to enable live submissions.
+        </p>
         {submitted ? (
           <p className="text-sm text-cyan-200">
             Request submitted. We will contact you within one business day.
