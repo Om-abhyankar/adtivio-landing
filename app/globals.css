@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+::selection {
+  background: color-mix(in oklab, #22d3ee 50%, #8b5cf6 50%);
+  color: #020617;
+}
+
+.glass-card {
+  backdrop-filter: blur(14px);
+  background: linear-gradient(
+    135deg,
+    rgb(148 163 184 / 8%),
+    rgb(34 211 238 / 4%)
+  );
+  border: 1px solid rgb(148 163 184 / 24%);
+}
