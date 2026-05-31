@@ -15,7 +15,7 @@ export function HeroSection() {
           Data-Driven Growth Infrastructure
         </p>
         <h1 className="max-w-4xl text-3xl font-semibold leading-tight tracking-wide text-white sm:text-5xl">
-          Engineering High-ROAS Media Buying &amp; Programmatic Ecosystems
+          Engineering High-ROAS Media Buying & Programmatic Ecosystems
         </h1>
         <p className="mt-6 max-w-3xl text-base leading-7 text-slate-200/90 sm:text-lg">
           Adtivio builds algorithmic acquisition systems focused on unit economics,
